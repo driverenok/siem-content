@@ -28,10 +28,14 @@
 	<tr>
 	    <td>password</td>
 	    <td>Поле ввода пароля</td>
+		<td></td>
+		<td></td>
 	</tr>
 	<tr>
-	    <td >name</td>
-	    <td>На заказ</td>
-	    <td>Название контроля</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
 	</tr>
 </table>
