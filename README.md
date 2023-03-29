@@ -2,6 +2,18 @@
 
 ## Description
 
+## Required tools
+
+[detection-rules](https://github.com/elastic/detection-rules)
+
+### Commands
+```
+python -m detection_rules validate-rule <rule_path>
+python -m detection_rules kibana upload-rule -f <rule_path>
+python -m detection_rules kibana upload-rule -d <rules_dir> - to recursively upload rules to kibana
+```
+
+
 ## Tactiks
 
 ### [Persistence](https://attack.mitre.org/tactics/TA0003/) 
