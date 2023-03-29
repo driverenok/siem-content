@@ -17,13 +17,13 @@
 	    <th>Elastic SIEM</th>
 		<th>Other SIEM</th>
 		<th>Note</th>
-	</tr >
-	<tr >
+	</tr>
+	<tr>
 	    <td rowspan="2">[Boot or Logon Autostart Execution](https://attack.mitre.org/techniques/T1547/)</td>
 	    <td>[Registry Run Keys / Startup Folder ](https://attack.mitre.org/techniques/T1547/001/)</td>
 	    <td>[Custom] Create persistence: Registry Run Keys</td>
 		<td>Windows_Autorun_Modification</td>
-		<td><>
+		<td></>
 	</tr>
 	<tr>
 	    <td>password</td>
