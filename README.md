@@ -4,15 +4,14 @@
 
 ## Required tools
 
-[detection-rules](https://github.com/elastic/detection-rules)
-1. Clone repo with specify version
+- [ ] Clone [detection-rules](https://github.com/elastic/detection-rules) repo with specify version
 ```
 git clone -b 8.5 https://github.com/elastic/detection-rules.git
 ```
 
 or clone master branch and change versions in "detection_rules\etc\packages.yml" file.
 
-2. Add .detection-rules-cfg.json file to repo:
+- [ ] Add .detection-rules-cfg.json file to repo:
 ```
 {
 "elastic_search_url": "",
@@ -25,7 +24,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 }
 ```
 
-3. Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
+- [ ] Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
 ```
     def _post_dict_conversion(self, obj: dict) -> dict:
         """Transform the converted API in place before sending to Kibana."""
@@ -36,7 +35,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 		...
 ``` 
 
-4. Modify bulk_create() func to
+- [ ] Modify bulk_create() func to
 ```
     @classmethod
     def bulk_create(cls, resources: list):
