@@ -7,7 +7,7 @@
 ```
 git clone -b 8.5 https://github.com/elastic/detection-rules.git
 ```
-or clone master branch and change versions in "detection_rules\etc\packages.yml" file.
+or clone master branch and change versions in "detection_rules\etc\packages.yml" file.</br>
 2. Add .detection-rules-cfg.json file to repo:
 ```
 {
@@ -20,7 +20,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 "kibana_password": ""
 }
 ```
-3Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
+3. Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
 ```
     def _post_dict_conversion(self, obj: dict) -> dict:
         """Transform the converted API in place before sending to Kibana."""
