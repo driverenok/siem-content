@@ -47,6 +47,15 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 ```
 This is necessary for updating existing if SIEM rule.
 
+* Modify non-schema fields in file non-ecs-schema.json:
+```
+		...
+		"ObjectType": "keyword",
+		"NewValue": "keyword",
+		"NewValueType": "keyword",
+		...
+```
+
 ### Commands
 ```
 python -m detection_rules validate-rule <rule_path>

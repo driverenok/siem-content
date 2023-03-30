@@ -1,0 +1,69 @@
+[metadata]
+creation_date = "2023/03/30"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/03/30"
+
+[rule]
+name = "New[Custom] Create persistence: Registry Run Keys"
+author = ["Andrey Krasnov"]
+description = """This rule will generate an alert when the *//Run* key is changed (added) by Sysmon 13 or WinEvt 4657 or WinEvt 4663.
+Accesses for 4663: 0x1 - ReadData 0x2 - WriteData
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1547/001/"
+]
+risk_score = 47
+rule_id = "faee5e4a-e2c1-42ac-8cad-ba2e87bd43a4"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Autostart Execution", "T1547", "Registry Run Keys / Startup Folder", "T1547.001"]
+type = "eql"
+
+query = '''
+any where (
+	/*	Sysmon	*/
+	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13"
+	and registry.path like~ "*\\CurrentVersion\\Run*" and registry.value not in~ ("", "ctfmon.exe")
+	and registry.data.strings != ""
+	)
+	or (
+	/*	WinEventLog*/
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4663"
+	and event.action: "Registry" and winlog.event_data.ObjectType: "Key"
+	and winlog.event_data.ObjectName != "" and winlog.event_data.ObjectName: "*\\CurrentVersion\\Run*"
+	and winlog.event_data.AccessMask: "0x2"
+	)
+	or (
+	/*	WinEventLog	+ SACL for key	*/
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657"
+	and winlog.event_data.ObjectName like~ "*\\CurrentVersion\\Run*"
+	and winlog.event_data.NewValueType not in~ ("", "-")
+	and winlog.event_data.NewValue not in~ ("", "-", "ctfmon.exe /n")
+	)
+'''
+
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1547"
+name = "Boot or Logon Autostart Execution"
+reference = "https://attack.mitre.org/techniques/T1547/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1547.001"
+name = "Registry Run Keys / Startup Folder"
+reference = "https://attack.mitre.org/techniques/T1547/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"
