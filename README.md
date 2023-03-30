@@ -8,7 +8,7 @@
 1. Clone repo with specify version
 ```
 git clone -b 8.5 https://github.com/elastic/detection-rules.git
-``
+```
 
 or clone master branch and change versions in "detection_rules\etc\packages.yml" file.
 
