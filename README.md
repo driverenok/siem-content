@@ -79,7 +79,7 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #1 -->
 	<tr>
 	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1546/">Event Triggered Execution </a></td>
-	    <tdrowspan="2"><a href="https://attack.mitre.org/techniques/T1546/002/">Screensaver</a></td>
+	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1546/002/">Screensaver</a></td>
 	    <td>[Custom] Create persistance: Modify Screensaver</td>
 		<td>[PT] Windows_Screensaver_modification, Create_persistance_Modify_Screensaver</td>
 		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
