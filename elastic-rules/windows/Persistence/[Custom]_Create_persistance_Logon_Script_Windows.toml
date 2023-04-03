@@ -29,11 +29,11 @@ type = "eql"
 query = '''
 registry where (
 	/*	Sysmon 13	*/
-	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13" and registry.path != "" and registry.path: "*\\Environment*" and registry.value: "UserInitMprLogonScript"
+	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13" and registry.path != "" and registry.path: "*\\Environment*" and registry.value like~ "UserInitMprLogonScript" and registry.data.strings != ""
 	)
 	or (
 	/*	WinEventLog	4657 + SACL for key	*/
-	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657" and winlog.event_data.ObjectName not in~ ("", "-") and winlog.event_data.ObjectName like~ ("*\\Environment*") and winlog.event_data.ObjectValueName: "UserInitMprLogonScript"
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657" and winlog.event_data.ObjectName not in~ ("", "-") and winlog.event_data.ObjectName like~ ("*\\Environment*") and winlog.event_data.ObjectValueNamelike~ "UserInitMprLogonScript" and winlog.event_data.NewValue not in ("", "-")
 	)
 '''
 

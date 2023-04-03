@@ -93,13 +93,13 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #3 -->
 	<tr>
 	    <td>[Custom] Use persistence: Start process using RunOnce</td>
-		<td>[Custom] Start_process_using_RunOnce</td>
+		<td>Use_persistence_Start_process_using_RunOnce</td>
 		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #4 -->
 	<tr>
 	    <td>[Custom] Use persistence: Start process as RunOnceEx</td>
-		<td>[Custom] Start_process_using_RunOnceEx</td>
+		<td>Use_persistence_Start_process_using_RunOnceEx</td>
 		<td>[+] runonce.exe -> rundll32.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #5 -->
@@ -111,13 +111,13 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #6 -->
 	<tr>
 	    <td>[Custom] Create persistence: Modidy StartupFolder</td>
-		<td>Modify_StartupFolder</td>
+		<td>Create_Persistence_Modify_StartupFolder</td>
 		<td>[-] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
 	</tr>
 	<!-- #7 -->
 	<tr>
 	    <td>[Custom] Use persistence: Start process from StartupFolder</td>
-		<td>[Custom] Start_process_from_StartupFolder</td>
+		<td>Use_persistence_Start_process_from_StartupFolder</td>
 		<td>[-] WinEventLog 4688, Sysmon 1 + XML</td>
 	</tr>
 	<!-- #8 -->
@@ -142,7 +142,7 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	</tr>
 	<tr>
 	    <td>[Custom] Use persistance: Start process as Logon Script (Windows)</td>
-		<td>[Custom] Start_process_as_Logon_Script</td>
+		<td>Use_persistence_ Start_process_as_Logon_Script</td>
 		<td>Terminal Services</td>
 	</tr>
 </table>

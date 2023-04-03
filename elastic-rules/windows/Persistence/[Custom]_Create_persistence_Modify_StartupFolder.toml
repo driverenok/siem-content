@@ -28,9 +28,11 @@ type = "eql"
 
 query = '''
 registry where (
+	/*	WinEventLog 4657	*/
 	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657" and winlog.event_data.ObjectName like~ ("*\\User Shell Folders*", "*\\Shell Folders*") and winlog.event_data.ObjectValueName in~ ("Common Startup","Startup")
 	)
 	or (
+	/*	Sysmon 13		*/
 	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13" and registry.path like~ ("*\\User Shell Folders*", "*\\Shell Folders*") and registry.value in~ ("Common Startup","Startup")
 	)
 '''
