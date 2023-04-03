@@ -1,0 +1,57 @@
+[metadata]
+creation_date = "2023/03/30"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/03/30"
+
+[rule]
+name = "[Custom] Create persistence: Create file in StartupFolder"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the file created in *Startup directory by WinEventLog 4663 or Sysmon 11.
+Accesses: 0x2 - WriteData, 0x6 - [WriteData (or AddFile), AppendData (or AddSubdirectory or CreatePipeInstance)]
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1547/001/"
+]
+risk_score = 47
+rule_id = "110b3a22-51af-446d-9691-fc17b31f6344"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Autostart Execution", "T1547", "Registry Run Keys / Startup Folder", "T1547.001", "Create File"]
+type = "eql"
+
+query = '''
+any where (
+	/* WinEventLog 4663	*/
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4663" and winlog.event_data.ObjectType: "File" and winlog.event_data.ObjectName like~ "*\\startup\\*" and winlog.event_data.AccessMask: "0x2"
+	)
+	or (
+	/*	Sysmon 11	*/
+	event.provider: "Microsoft-Windows-Sysmon" and event.code: "11" and file.directory like~ "*\\startup" and file.name != ""
+	)
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1547"
+name = "Boot or Logon Autostart Execution"
+reference = "https://attack.mitre.org/techniques/T1547/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1547.001"
+name = "Registry Run Keys / Startup Folder"
+reference = "https://attack.mitre.org/techniques/T1547/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"

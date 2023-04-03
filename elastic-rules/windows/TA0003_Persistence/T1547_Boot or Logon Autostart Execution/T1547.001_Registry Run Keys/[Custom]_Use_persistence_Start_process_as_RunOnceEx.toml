@@ -1,0 +1,57 @@
+[metadata]
+creation_date = "2023/04/03"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/03"
+
+[rule]
+name = "[Custom] Use persistence: Start process as RunOnce"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the process will starts in follow sequence: runonce.exe -> rundll32.exe -> TargetProcess with WinEventLog 4688 or Sysmon 1 audit.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1547/001/",
+	"https://github.com/elastic/detection-rules/blob/main/rules/windows/persistence_run_key_and_startup_broad.toml",
+	"https://github.com/elastic/detection-rules/blob/main/rules/windows/persistence_via_hidden_run_key_valuename.toml",
+	"https://github.com/outflanknl/SharpHide",
+	"https://github.com/ewhitehats/InvisiblePersistence"
+]
+risk_score = 47
+rule_id = "4dc7c6ac-0982-4a43-aa2d-81dc692f6bca"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Autostart Execution", "T1547", "Registry Run Keys / Startup Folder", "T1547.001", "RunOnceEx", "Start Process", "runonce.exe", "rundll32.exe", "RunOnceExProcess"]
+type = "eql"
+
+query = '''
+
+sequence
+	[process where process.command_line: "*\\runonce.exe*/Explorer"]
+	[process where process.parent.name: "runonce.exe" and process.command_line like~ "*\\rundll32.exe*iernonce.dll*RunOnceExProcess"]
+	[process where process.parent.name: "rundll32.exe"]
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1547"
+name = "Boot or Logon Autostart Execution"
+reference = "https://attack.mitre.org/techniques/T1547/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1547.001"
+name = "Registry Run Keys / Startup Folder"
+reference = "https://attack.mitre.org/techniques/T1547/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"

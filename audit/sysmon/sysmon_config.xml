@@ -1,0 +1,36 @@
+<Sysmon schemaversion="4.50">
+	<EventFiltering>
+		<RuleGroup name="" groupRelation="or">
+			<ProcessCreate onmatch="exclude">
+
+			</ProcessCreate>
+		</RuleGroup>
+		
+		<RuleGroup name="" groupRelation="or">
+			<ImageLoad onmatch="include">
+				<Image condition="is">C:\Windows\system32\dns.exe</Image> <!-- Not exist in SwiftOnSecurity --> <!-- Abuse DnsAdmins group privileges -->
+			</ImageLoad>
+		</RuleGroup>
+		
+		<RuleGroup name="" groupRelation="or">
+			<FileCreate onmatch="include">
+				<TargetFilename name="T1023" condition="contains">\Start Menu</TargetFilename> <!-- ???-->
+			</FileCreate>
+		</RuleGroup>
+		
+		<RuleGroup name="" groupRelation="or">
+			<RegistryEvent onmatch="include">
+			<TargetObject name="T1547_001,Create Persistance: Registry Run Keys" condition="contains">CurrentVersion\Run</TargetObject> <!-- Exist in SwiftOnSecurity-->
+			<TargetObject name="T1547.001,Change Startup Folder,T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">Shell Folders\Startup</TargetObject> <!-- Not exist in SwiftOnSecurity--> <!-- http://windows.mixed-spb.ru/service_folders/shell_folders.php -->
+			<TargetObject name="T1547.001,Change Startup Folder,T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">Shell Folders\Common Startup</TargetObject> <!-- Not exist in SwiftOnSecurity--> <!-- http://windows.mixed-spb.ru/service_folders/shell_folders.php -->
+			<TargetObject name="T1547.001,Change Startup Folder,T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">User Shell Folders\Startup</TargetObject> <!-- Exist in SwiftOnSecurity--> 
+			<TargetObject name="T1547.001,Change Startup Folder,T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">User Shell Folders\Common Startup</TargetObject> <!-- Not exist in SwiftOnSecurity-->
+			<TargetObject name="T1037.001,Logon Script (Windows)" condition="contains">UserInitMprLogonScript</TargetObject> <!-- Exist in SwiftOnSecurity-->
+			<TargetObject name="T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">CurrentVersion\Explorer\User Shell Folders</TargetObject> <!-- SwiftOnSecurity has only Startup Key-->
+			<TargetObject name="T1547.009,Shortcut Modification,T1112,Modify Registry" condition="contains">CurrentVersion\Explorer\Shell Folders</TargetObject> <!-- SwiftOnSecurity has only Startup Key-->
+			<TargetObject name="T1546.002,Screensaver Modification,T1112,Modify Registry" condition="contains">Control Panel\Desktop</TargetObject> <!-- Not exist in SwiftOnSecurity-->
+			<TargetObject name="T1543.003,Modify DNS Service,T1112,Modify RegistryT1112,Modify Registry" condition="contains">ServerLevelPluginDll</TargetObject> <!-- Not exist in SwiftOnSecurity--> <!-- DNSAdmins group privilege abuse -->
+			</RegistryEvent>
+		</RuleGroup>
+	</EventFiltering>
+</Sysmon>

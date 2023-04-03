@@ -5,9 +5,10 @@ maturity = "production"
 updated_date = "2023/03/30"
 
 [rule]
-name = "New[Custom] Create persistence: Registry Run Keys"
+name = "[Custom] Create persistence: Registry Run Keys  (based on registry activity)"
 author = ["Andrey Krasnov"]
-description = """This rule will generate an alert when the *//Run* key is changed (added) by Sysmon 13 or WinEvt 4657 or WinEvt 4663.
+description = """
+This rule will generate an alert when the *//Run* key is changed (added) by Sysmon 13 or WinEvt 4657 or WinEvt 4663.
 Accesses for 4663: 0x1 - ReadData 0x2 - WriteData
 """
 from = "now-5m"
@@ -18,7 +19,11 @@ note = """
 
 """
 references = [
-    "https://attack.mitre.org/techniques/T1547/001/"
+    "https://attack.mitre.org/techniques/T1547/001/",
+	"https://github.com/elastic/detection-rules/blob/main/rules/windows/persistence_run_key_and_startup_broad.toml",
+	"https://github.com/elastic/detection-rules/blob/main/rules/windows/persistence_via_hidden_run_key_valuename.toml",
+	"https://github.com/outflanknl/SharpHide",
+	"https://github.com/ewhitehats/InvisiblePersistence"
 ]
 risk_score = 47
 rule_id = "faee5e4a-e2c1-42ac-8cad-ba2e87bd43a4"
@@ -28,20 +33,20 @@ type = "eql"
 
 query = '''
 any where (
-	/*	Sysmon	*/
+	/*	Sysmon 13	*/
 	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13"
-	and registry.path like~ "*\\CurrentVersion\\Run*" and registry.value not in~ ("", "ctfmon.exe")
+	and registry.path like~ "*\\CurrentVersion\\*Run*" and registry.value not in~ ("", "ctfmon.exe")
 	and registry.data.strings != ""
 	)
 	or (
-	/*	WinEventLog*/
+	/*	WinEventLog	*/
 	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4663"
 	and event.action: "Registry" and winlog.event_data.ObjectType: "Key"
 	and winlog.event_data.ObjectName != "" and winlog.event_data.ObjectName: "*\\CurrentVersion\\Run*"
 	and winlog.event_data.AccessMask: "0x2"
 	)
 	or (
-	/*	WinEventLog	+ SACL for key	*/
+	/*	WinEventLog	4657 + SACL for key	*/
 	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657"
 	and winlog.event_data.ObjectName like~ "*\\CurrentVersion\\Run*"
 	and winlog.event_data.NewValueType not in~ ("", "-")

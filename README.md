@@ -76,30 +76,52 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 		<th>Other SIEM</th>
 		<th>Note</th>
 	</tr>
+	<!-- #1 -->
 	<tr>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys</a></td>
-	    <td>[Custom] Create persistence: Registry Run Keys</td>
-		<td>Windows_Autorun_Modification</td>
-		<td></>
+	    <td rowspan="8"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
+	    <td rowspan="8"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
+	    <td>[Custom] Create persistence: Registry Run Keys (based on process activity)</td>
+		<td>[?]</td>
+		<td> [-] req add, Set-ItemProperty</td>
 	</tr>
+	<!-- #3 -->
 	<tr>
-	    <td></td>
-		<td></td>
-		<td></td>
+	    <td>[Custom] Create persistence: Registry Run Keys (based on registry activity)</td>
+		<td>[?]</td>
+		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>	
 	</tr>
-		<tr>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1547/001/">Startup Folder</a></td>
-	    <td>[Custom] Create persistence: Registry Run Keys</td>
-		<td>Windows_Autorun_Modification</td>
-		<td></>
-	</tr>
+	<!-- #3 -->
 	<tr>
-	    <td></td>
-		<td></td>
-		<td></td>
+	    <td>[Custom] Use persistence: Start process as RunOnce</td>
+		<td>[?]</td>
+		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
+	<!-- #4 -->
+	<tr>
+	    <td>[Custom] Use persistence: Start process as RunOnce</td>
+		<td>[?]</td>
+		<td>[+] runonce.exe -> rundll32.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
+	</tr>
+	<!-- #5 -->
+	<tr>
+	    <td>[Custom] Create persistence: Create file in StartupFolder</td>
+		<td>[?]</td>
+		<td>[+] WinEventLog 4663 + SACL, Sysmon 11 + XML</td>
+	</tr>
+	<!-- #6 -->
+	<tr>
+	    <td>[Custom] Create persistence: Change StartupFolder</td>
+		<td>[?]</td>
+		<td>[-] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
+	</tr>
+	<!-- #7 -->
+	<tr>
+	    <td>[Custom] Use persistence: Start process from StartupFolder</td>
+		<td>[?]</td>
+		<td>[-] WinEventLog 4688, Sysmon 1 + XML</td>
+	</tr>
+	<!-- RunServices (Once, Ex)-->
+	<!-- Terminal Services-->
 	<tr>
 		<td></td>
 		<td></td>
