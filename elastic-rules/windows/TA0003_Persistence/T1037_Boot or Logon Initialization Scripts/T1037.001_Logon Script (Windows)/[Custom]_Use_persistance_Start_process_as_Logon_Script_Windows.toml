@@ -1,0 +1,57 @@
+[metadata]
+creation_date = "2023/04/03"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/03"
+
+[rule]
+name = "[Custom] Use persistance: Start process as Logon Script (Windows)"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the HKCU\Environment\UserInitMprLogonScript key is changed (added) by Sysmon 13 or WinEventLog 4657.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1037/001/",
+]
+risk_score = 47
+rule_id = "4bbf1b92-dac1-4394-b42b-992b9e5518ba"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Initialization Scripts", "T1037", "Logon Script (Windows) ", "T1037.001", "UserInitMprLogonScript", "Start Process", "userinit.exe"]
+type = "eql"
+
+query = '''
+process where (
+	/*	WinEventLog	4688	*/
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4688" and process.parent.name like~ "*userinit.exe*" and process.name not in~ ("explorer.exe")
+	)
+	or (
+	/*	Sysmon 1		*/
+	event.provider: "Microsoft-Windows-Sysmon" and event.code: "1" and process.parent.name like~ "*userinit.exe*" and process.name not in~ ("explorer.exe")
+	)
+'''
+
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1037"
+name = "Boot or Logon Initialization Scripts "
+reference = "https://attack.mitre.org/techniques/T1037/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1037.001"
+name = "Logon Script (Windows) "
+reference = "https://attack.mitre.org/techniques/T1037/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"

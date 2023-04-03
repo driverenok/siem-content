@@ -78,55 +78,71 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	</tr>
 	<!-- #1 -->
 	<tr>
-	    <td rowspan="8"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
-	    <td rowspan="8"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
+	    <td rowspan="9"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
+	    <td rowspan="9"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
 	    <td>[Custom] Create persistence: Registry Run Keys (based on process activity)</td>
-		<td>[?]</td>
+		<td>[-]</td>
 		<td> [-] req add, Set-ItemProperty</td>
 	</tr>
-	<!-- #3 -->
+	<!-- #2 -->
 	<tr>
 	    <td>[Custom] Create persistence: Registry Run Keys (based on registry activity)</td>
-		<td>[?]</td>
+		<td>Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>	
 	</tr>
 	<!-- #3 -->
 	<tr>
-	    <td>[Custom] Use persistence: Start process as RunOnce</td>
-		<td>[?]</td>
+	    <td>[Custom] Use persistence: Start process using RunOnce</td>
+		<td>[Custom] Start_process_using_RunOnce</td>
 		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #4 -->
 	<tr>
-	    <td>[Custom] Use persistence: Start process as RunOnce</td>
-		<td>[?]</td>
+	    <td>[Custom] Use persistence: Start process as RunOnceEx</td>
+		<td>[Custom] Start_process_using_RunOnceEx</td>
 		<td>[+] runonce.exe -> rundll32.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #5 -->
 	<tr>
 	    <td>[Custom] Create persistence: Create file in StartupFolder</td>
-		<td>[?]</td>
+		<td>Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4663 + SACL, Sysmon 11 + XML</td>
 	</tr>
 	<!-- #6 -->
 	<tr>
-	    <td>[Custom] Create persistence: Change StartupFolder</td>
-		<td>[?]</td>
+	    <td>[Custom] Create persistence: Modidy StartupFolder</td>
+		<td>Modify_StartupFolder</td>
 		<td>[-] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
 	</tr>
 	<!-- #7 -->
 	<tr>
 	    <td>[Custom] Use persistence: Start process from StartupFolder</td>
-		<td>[?]</td>
+		<td>[Custom] Start_process_from_StartupFolder</td>
 		<td>[-] WinEventLog 4688, Sysmon 1 + XML</td>
 	</tr>
-	<!-- RunServices (Once, Ex)-->
-	<!-- Terminal Services-->
+	<!-- #8 -->
 	<tr>
+	    <td></td>
 		<td></td>
+		<td>RunServices (Once, Ex)</td>
+	</tr>
+	<!-- #9 -->
+	<tr>
+	    <td></td>
 		<td></td>
+		<td>Terminal Services</td>
+	</tr>
+	<!-- #1 -->
+	<tr>
+	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/">Boot or Logon Initialization Scripts</a></td>
+	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/001/">Logon Script (Windows)</a></td>
+	    <td>[Custom] Create persistance: Logon Script (Windows)</td>
+		<td>Userinitmprlogonscript_Modify</td>
 		<td></td>
-		<td></td>
-		<td></td>
+	</tr>
+	<tr>
+	    <td>[Custom] Use persistance: Start process as Logon Script (Windows)</td>
+		<td>[Custom] Start_process_as_Logon_Script</td>
+		<td>Terminal Services</td>
 	</tr>
 </table>

@@ -1,0 +1,57 @@
+[metadata]
+creation_date = "2023/04/03"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/03"
+
+[rule]
+name = "[Custom] Create persistance Logon Script (Windows)"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the HKCU\Environment\UserInitMprLogonScript key is changed (added) by Sysmon 13 or WinEventLog 4657.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1037/001/",
+]
+risk_score = 47
+rule_id = "9e36a35f-fb93-424b-a18c-94b8ad038fed"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Initialization Scripts", "T1037", "Logon Script (Windows) ", "T1037.001", "UserInitMprLogonScript", "Registry"]
+type = "eql"
+
+query = '''
+registry where (
+	/*	Sysmon 13	*/
+	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13" and registry.path != "" and registry.path: "*\\Environment*" and registry.value: "UserInitMprLogonScript"
+	)
+	or (
+	/*	WinEventLog	4657 + SACL for key	*/
+	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657" and winlog.event_data.ObjectName not in~ ("", "-") and winlog.event_data.ObjectName like~ ("*\\Environment*") and winlog.event_data.ObjectValueName: "UserInitMprLogonScript"
+	)
+'''
+
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1037"
+name = "Boot or Logon Initialization Scripts "
+reference = "https://attack.mitre.org/techniques/T1037/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1037.001"
+name = "Logon Script (Windows) "
+reference = "https://attack.mitre.org/techniques/T1037/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"
