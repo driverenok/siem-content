@@ -86,38 +86,38 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	</tr>
 	<!-- #2 -->
 	<tr>
-	    <td>[Custom] Create persistence: Registry Run Keys (based on registry activity)</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Registry_Run_Keys_based_on_registry_activity.toml">[Custom] Create persistence: Registry Run Keys (based on registry activity)</a></td>
 		<td>Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>	
 	</tr>
 	<!-- #3 -->
 	<tr>
-	    <td>[Custom] Use persistence: Start process using RunOnce</td>
-		<td>Use_persistence_Start_process_using_RunOnce</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_as_RunOnce.toml">[Custom] Use persistence: Start process using RunOnce</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnceEx">Use_persistence_Start_process_using_RunOnce">Use_persistence_Start_process_using_RunOnce</a></td>
 		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #4 -->
 	<tr>
-	    <td>[Custom] Use persistence: Start process as RunOnceEx</td>
-		<td>Use_persistence_Start_process_using_RunOnceEx</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_as_RunOnceEx.toml">[Custom] Use persistence: Start process as RunOnceEx</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnceEx">Use_persistence_Start_process_using_RunOnceEx</a></td>
 		<td>[+] runonce.exe -> rundll32.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #5 -->
 	<tr>
-	    <td>[Custom] Create persistence: Create file in StartupFolder</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Create_file_in_StartupFolder.toml">[Custom] Create persistence: Create file in StartupFolder</a></td>
 		<td>Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4663 + SACL, Sysmon 11 + XML</td>
 	</tr>
 	<!-- #6 -->
 	<tr>
-	    <td>[Custom] Create persistence: Modidy StartupFolder</td>
-		<td>Create_Persistence_Modify_StartupFolder</td>
+	    <td><a href="./siem-content/elastic-rules/windows/Persistence/[Custom]_Create_persistence_Modify_StartupFolder.toml"">[Custom] Create persistence: Modidy StartupFolder</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Create_persistance_Modify_StartupFolder">Create_Persistence_Modify_StartupFolder</a></td>
 		<td>[-] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
 	</tr>
 	<!-- #7 -->
 	<tr>
-	    <td>[Custom] Use persistence: Start process from StartupFolder</td>
-		<td>Use_persistence_Start_process_from_StartupFolder</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_from_StartupFolder.toml">[Custom] Use persistence: Start process from StartupFolder</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistance_Start_process_from_StartupFolder">Use_persistence_Start_process_from_StartupFolder</a></td>
 		<td>[-] WinEventLog 4688, Sysmon 1 + XML</td>
 	</tr>
 	<!-- #8 -->
@@ -136,13 +136,13 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<tr>
 	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/">Boot or Logon Initialization Scripts</a></td>
 	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/001/">Logon Script (Windows)</a></td>
-	    <td>[Custom] Create persistance: Logon Script (Windows)</td>
-		<td>Userinitmprlogonscript_Modify</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistance_Logon_Script_Windows.toml">[Custom] Create persistance: Logon Script (Windows)</a></td>
+		<td>serinitmprlogonscript_Modify</td>
 		<td></td>
 	</tr>
 	<tr>
-	    <td>[Custom] Use persistance: Start process as Logon Script (Windows)</td>
-		<td>Use_persistence_ Start_process_as_Logon_Script</td>
+	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistance_Start_process_as_Logon_Script_Windows.toml">[Custom] Use persistance: Start process as Logon Script (Windows)</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistance_Start_process_as_Logon_Script">Use_persistence_Start_process_as_Logon_Script</a></td>
 		<td>Terminal Services</td>
 	</tr>
 </table>
