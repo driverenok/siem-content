@@ -78,7 +78,21 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	</tr>
 	<!-- #1 -->
 	<tr>
-	    <td rowspan="9"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
+	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1546/">Event Triggered Execution </a></td>
+	    <tdrowspan="2"><a href="https://attack.mitre.org/techniques/T1546/002/">Screensaver</a></td>
+	    <td>[Custom] Create persistance: Modify Screensaver</td>
+		<td>[PT] Windows_Screensaver_modification, Create_persistance_Modify_Screensaver</td>
+		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
+	</tr>
+	<!-- #2 -->
+	<tr>
+	    <td>[Custom] Use persistance: Start process as Screensaver</td>
+		<td>Use_persistance_Start_Process_as_Screensaver</td>
+		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
+	</tr>	
+	<!-- #1 -->
+	<tr>
+	    <td rowspan="10"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
 	    <td rowspan="9"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
 	    <td>[Custom] Create persistence: Registry Run Keys (based on process activity)</td>
 		<td>[-]</td>
@@ -87,7 +101,7 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #2 -->
 	<tr>
 	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Registry_Run_Keys_based_on_registry_activity.toml">[Custom] Create persistence: Registry Run Keys (based on registry activity)</a></td>
-		<td>Windows_Autorun_Modification</td>
+		<td>[PT] Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>	
 	</tr>
 	<!-- #3 -->
@@ -105,7 +119,7 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #5 -->
 	<tr>
 	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Create_file_in_StartupFolder.toml">[Custom] Create persistence: Create file in StartupFolder</a></td>
-		<td>Windows_Autorun_Modification</td>
+		<td>[PT] Windows_Autorun_Modification</td>
 		<td>[+] WinEventLog 4663 + SACL, Sysmon 11 + XML</td>
 	</tr>
 	<!-- #6 -->
@@ -132,12 +146,19 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 		<td></td>
 		<td>Terminal Services</td>
 	</tr>
+	<!-- #10 -->
+	<tr>
+		<td><a href="https://attack.mitre.org/techniques/T1547/009/">Shortcut Modification </a></td>
+	    <td>[Custom] Create persistence: Shortcut Modification</td>
+		<td>Create_persistance_Shortcut_Modification</td>
+		<td>WinEventLog 4663 + SACL of LNK-files</td>
+	</tr>
 	<!-- #1 -->
 	<tr>
 	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/">Boot or Logon Initialization Scripts</a></td>
 	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/001/">Logon Script (Windows)</a></td>
 	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistance_Logon_Script_Windows.toml">[Custom] Create persistance: Logon Script (Windows)</a></td>
-		<td>serinitmprlogonscript_Modify</td>
+		<td>[PT] Userinitmprlogonscript_Modify</td>
 		<td></td>
 	</tr>
 	<tr>

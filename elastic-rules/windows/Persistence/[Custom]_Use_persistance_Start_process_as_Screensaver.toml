@@ -1,0 +1,55 @@
+[metadata]
+creation_date = "2023/04/03"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/03"
+
+[rule]
+name = "[Custom] Use persistance: Start process as Screensaver"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the process (fail screensaver) will starts in follow sequence: winlogon.exe -> TargetProcess with WinEventLog 4688 or Sysmon 1 audit.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1546/002/",
+]
+risk_score = 47
+rule_id = "4bbf1b92-dac1-4394-b42b-992b9e5518ba"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Event Triggered Execution", "T1546", "Screensaver",  "T1546.002", "SCRNSAVE.exe", "Start Process", "winlogon.exe"]
+type = "eql"
+
+query = '''
+process where (
+	process.parent.name like~ "winlogon.exe" and not (
+		process.executable like~ ("C:\\Windows\\System32\\*.scr", "C:\\Windows\\SysWOW64\\*.scr") 
+		and process.executable like~ ("*\\system32\\userinit.exe", "*\\System32\\LogonUI.exe","*\\System32\\dwm.exe")
+		)
+	)
+'''
+
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1546"
+name = "Event Triggered Execution"
+reference = "https://attack.mitre.org/techniques/T1546/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1546.002"
+name = "Screensaver"
+reference = "https://attack.mitre.org/techniques/T1546/002/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"
