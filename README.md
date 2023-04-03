@@ -93,7 +93,7 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<!-- #3 -->
 	<tr>
 	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_as_RunOnce.toml">[Custom] Use persistence: Start process using RunOnce</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnceEx">Use_persistence_Start_process_using_RunOnce">Use_persistence_Start_process_using_RunOnce</a></td>
+		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnce">Use_persistence_Start_process_using_RunOnce</a></td>
 		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
 	</tr>
 	<!-- #4 -->
