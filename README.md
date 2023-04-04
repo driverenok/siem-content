@@ -88,12 +88,12 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 	<tr>
 	    <td>[Custom] Use persistance: Start process as Screensaver</td>
 		<td>Use_persistance_Start_Process_as_Screensaver</td>
-		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
+		<td>[+] WinEventLog 4688, Sysmon 1</td>
 	</tr>	
 	<!-- #1 -->
 	<tr>
-	    <td rowspan="10"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
-	    <td rowspan="9"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
+	    <td rowspan="11"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
+	    <td rowspan="10"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
 	    <td>[Custom] Create persistence: Registry Run Keys (based on process activity)</td>
 		<td>[-]</td>
 		<td> [-] req add, Set-ItemProperty</td>
@@ -147,6 +147,12 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 		<td>Terminal Services</td>
 	</tr>
 	<!-- #10 -->
+	<tr>
+	    <td>[Custom] Use persistence: Start process as Run mechanism (based ShellCore engine)</td>
+		<td>not norm for 9705-9708</td>
+		<td>Based on EID 9707 (Microsoft-Windows-Shell-Core)</td>
+	</tr>
+	<!-- #11 -->
 	<tr>
 		<td><a href="https://attack.mitre.org/techniques/T1547/009/">Shortcut Modification </a></td>
 	    <td>[Custom] Create persistence: Shortcut Modification</td>
