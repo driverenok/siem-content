@@ -1,0 +1,52 @@
+[metadata]
+creation_date = "2023/04/04"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/04"
+git
+[rule]
+name = "[Custom] Use persistence: Start process as Run mechanism (based ShellCore engine)"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the process will starts with Run or Runnce mechanism based WinEventLog 9705 and 9707.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+    "https://attack.mitre.org/techniques/T1547/001/",
+	"https://blog.menasec.net/2019/02/threat-hunting-20-runrunonce-eid.html",
+	"https://nasbench.medium.com/finding-forensic-goodness-in-obscure-windows-event-logs-60e978ea45a3"
+]
+risk_score = 47
+rule_id = "c3ad98be-a616-4e5c-9c03-6dde3ca36265"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Autostart Execution", "T1547", "Registry Run Keys / Startup Folder", "T1547.001", "Run", "RunOnce", "Start Process", "runonce.exe", "Shell-Core"]
+type = "eql"
+
+query = '''
+any where
+	event.provider: "Microsoft-Windows-Shell-Core" and event.code: "9707" and not (winlog.event_data.Command like~ ("*securityhealthsystray.exe*", "*ctfmon.exe*"))
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1547"
+name = "Boot or Logon Autostart Execution"
+reference = "https://attack.mitre.org/techniques/T1547/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1547.001"
+name = "Registry Run Keys / Startup Folder"
+reference = "https://attack.mitre.org/techniques/T1547/001/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"
