@@ -2,13 +2,30 @@
 
 ## Description
 
-## Required tools
+<add_descriprion>
+
+## Credits tools
+
+### SwiftOnSecurity Sysmon Config
+
+* Clone [SwiftOnSecurity](https://github.com/SwiftOnSecurity/sysmon-config.git) repo
+```
+git clone https://github.com/SwiftOnSecurity/sysmon-config.git
+```
+
+*Copy sysmonconfig-export.xml file to "<project_dir>\audit\sysmon":
+```
+copy ..\sysmon\sysmonconfig-export.xml <project_dir>\audit\sysmon\
+```
+
+### Detection Rules
 
 * Clone [detection-rules](https://github.com/elastic/detection-rules) repo with specify version
 ```
 git clone -b 8.5 https://github.com/elastic/detection-rules.git
 ```
 or clone master branch and change versions in "detection_rules\etc\packages.yml" file.</br>
+
 * Add .detection-rules-cfg.json file to repo:
 ```
 {
@@ -21,6 +38,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 "kibana_password": ""
 }
 ```
+
 * Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
 ```
     def _post_dict_conversion(self, obj: dict) -> dict:
@@ -31,7 +49,8 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
         self._convert_add_setup(obj)
 		...
 ``` 
-* Modify bulk_create() func to
+
+* Modify bulk_create() func in "kibana\resources.py" file to:
 ```
     @classmethod
     def bulk_create(cls, resources: list):
@@ -47,7 +66,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 ```
 This is necessary for updating existing if SIEM rule.
 
-* Modify non-schema fields in file non-ecs-schema.json:
+* Modify non-schema fields in file "detection_rules\etcnon-ecs-schema.json":
 ```
 		...
 		"ObjectType": "keyword",
@@ -56,13 +75,50 @@ This is necessary for updating existing if SIEM rule.
 		...
 ```
 
-### Commands
+#### Commands
 ```
 python -m detection_rules validate-rule <rule_path>
 python -m detection_rules kibana upload-rule -f <rule_path> -r
 python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively upload rules to kibana
 ```
 
+### Sysmon Modular
+* Clone [sysmon-modular](https://github.com/olafhartong/sysmon-modular.git) repo:
+```
+git clone https://github.com/olafhartong/sysmon-modular.git
+```
+
+*Copy Merge-SysmonXml.ps1 file to "<project_dir>\audit\sysmon" and 
+```
+>Import-Module .\Merge-SysmonXml.ps1
+
+   //**                  ***//
+  ///#(**               **%(///
+  ((&&&**               **&&&((
+   (&&&**   ,(((((((.   **&&&(
+   ((&&**(((((//(((((((/**&&((      _____                                                            __      __
+    (&&///((////(((((((///&&(      / ___/__  ___________ ___  ____  ____        ____ ___  ____  ____/ /_  __/ /___ ______
+     &////(/////(((((/(////&       \__ \/ / / / ___/ __ `__ \/ __ \/ __ \______/ __ `__ \/ __ \/ __  / / / / / __ `/ ___/
+     ((//  /////(/////  /(((      ___/ / /_/ (__  ) / / / / / /_/ / / / /_____/ / / / / / /_/ / /_/ / /_/ / / /_/ / /
+    &(((((#.///////// #(((((&    /____/\__, /____/_/ /_/ /_/\____/_/ /_/     /_/ /_/ /_/\____/\__,_/\__,_/_/\__,_/_/
+     &&&&((#///////((#((&&&&          /____/
+       &&&&(#/***//(#(&&&&
+         &&&&****///&&&&                                                                            by Olaf Hartong
+            (&    ,&.
+             .*&&*.
+			 
+>dir
+
+    Directory: .\siem-content\audit\sysmon
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----        07.04.2023     14:29           3139 custom_sysmon_config.xml
+-a----        07.03.2023     16:53          37134 Merge-SysmonXml.ps1
+-a----        06.12.2022     22:19         123257 sysmon_config-SwiftOnSecurity.xml
+
+>Merge-AllSysmonXml -Path ( Get-ChildItem '*.xml') -AsString | Out-File sysmonconfig.xml
+```
 
 ## Tactics
 
