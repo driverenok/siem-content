@@ -23,7 +23,7 @@ SIEM Content is repo that contain detection rules for Elastic SIEM
 | [`elastic-rules/`](elastic-rules)         | Directory where rules are stored                                 |
 | [`samples/`](samples)                     | This is a container events samples associated to specific attack |
 
-## Credits tools
+## Credit tools
 
  - [SwiftOnSecurity](https://github.com/SwiftOnSecurity/sysmon-config) - Sysmon base config file.
  - [sysmon-modular](https://github.com/olafhartong/sysmon-modular) - Credit a Merge-SysmonXml.ps1 to merge base and custom Sysmon confif file.
@@ -133,11 +133,11 @@ This is necessary for updating existing if SIEM rule.
 Modify non-schema fields in file "detection_rules\etc\non-ecs-schema.json":
 ```
 {
-	...
-	"ObjectType": "keyword",
-	"NewValue": "keyword",
-	"NewValueType": "keyword",
-	...
+...
+"ObjectType": "keyword",
+"NewValue": "keyword",
+"NewValueType": "keyword",
+...
 }
 ```
 
@@ -153,108 +153,38 @@ python -m detection_rules kibana upload-rule -d <rules_dir> -r - to recursively 
 
 ### [Persistence](https://attack.mitre.org/tactics/TA0003/) 
 
-<table>
-	<tr>
-	    <th>Techniques</th>
-	    <th>Sub-techniques</th>
-	    <th>Elastic SIEM</th>
-		<th>Other SIEM</th>
-		<th>Note</th>
-	</tr>
-	<!-- #1 -->
-	<tr>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1546/">Event Triggered Execution </a></td>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1546/002/">Screensaver</a></td>
-	    <td>[Custom] Create persistance: Modify Screensaver</td>
-		<td>[PT] Windows_Screensaver_modification, Create_persistance_Modify_Screensaver</td>
-		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
-	</tr>
-	<!-- #2 -->
-	<tr>
-	    <td>[Custom] Use persistance: Start process as Screensaver</td>
-		<td>Use_persistance_Start_Process_as_Screensaver</td>
-		<td>[+] WinEventLog 4688, Sysmon 1</td>
-	</tr>	
-	<!-- #1 -->
-	<tr>
-	    <td rowspan="11"><a href="https://attack.mitre.org/techniques/T1547/">Boot or Logon Autostart Execution</a></td>
-	    <td rowspan="10"><a href="https://attack.mitre.org/techniques/T1547/001/">Registry Run Keys / Startup Folder</a></td>
-	    <td>[Custom] Create persistence: Registry Run Keys (based on process activity)</td>
-		<td>[-]</td>
-		<td> [-] req add, Set-ItemProperty</td>
-	</tr>
-	<!-- #2 -->
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Registry_Run_Keys_based_on_registry_activity.toml">[Custom] Create persistence: Registry Run Keys (based on registry activity)</a></td>
-		<td>[PT] Windows_Autorun_Modification</td>
-		<td>[+] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>	
-	</tr>
-	<!-- #3 -->
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_as_RunOnce.toml">[Custom] Use persistence: Start process using RunOnce</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnce">Use_persistence_Start_process_using_RunOnce</a></td>
-		<td>[+] runonce.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
-	</tr>
-	<!-- #4 -->
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_as_RunOnceEx.toml">[Custom] Use persistence: Start process as RunOnceEx</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistence_Start_process_using_RunOnceEx">Use_persistence_Start_process_using_RunOnceEx</a></td>
-		<td>[+] runonce.exe -> rundll32.exe -> TargetProcess (WinEventLog 4688, Sysmon 1)</td>
-	</tr>
-	<!-- #5 -->
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistence_Create_file_in_StartupFolder.toml">[Custom] Create persistence: Create file in StartupFolder</a></td>
-		<td>[PT] Windows_Autorun_Modification</td>
-		<td>[+] WinEventLog 4663 + SACL, Sysmon 11 + XML</td>
-	</tr>
-	<!-- #6 -->
-	<tr>
-	    <td><a href="./siem-content/elastic-rules/windows/Persistence/[Custom]_Create_persistence_Modify_StartupFolder.toml"">[Custom] Create persistence: Modidy StartupFolder</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Create_persistance_Modify_StartupFolder">Create_Persistence_Modify_StartupFolder</a></td>
-		<td>[-] WinEventLog 4657 + SACL, Sysmon 13 + XML</td>
-	</tr>
-	<!-- #7 -->
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistence_Start_process_from_StartupFolder.toml">[Custom] Use persistence: Start process from StartupFolder</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistance_Start_process_from_StartupFolder">Use_persistence_Start_process_from_StartupFolder</a></td>
-		<td>[-] WinEventLog 4688, Sysmon 1 + XML</td>
-	</tr>
-	<!-- #8 -->
-	<tr>
-	    <td></td>
-		<td></td>
-		<td>RunServices (Once, Ex)</td>
-	</tr>
-	<!-- #9 -->
-	<tr>
-	    <td></td>
-		<td></td>
-		<td>Terminal Services</td>
-	</tr>
-	<!-- #10 -->
-	<tr>
-	    <td>[Custom] Use persistence: Start process as Run mechanism (based ShellCore engine)</td>
-		<td>not norm for 9705-9708</td>
-		<td>Based on EID 9707 (Microsoft-Windows-Shell-Core)</td>
-	</tr>
-	<!-- #11 -->
-	<tr>
-		<td><a href="https://attack.mitre.org/techniques/T1547/009/">Shortcut Modification </a></td>
-	    <td>[Custom] Create persistence: Shortcut Modification</td>
-		<td>Create_persistance_Shortcut_Modification</td>
-		<td>WinEventLog 4663 + SACL of LNK-files</td>
-	</tr>
-	<!-- #1 -->
-	<tr>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/">Boot or Logon Initialization Scripts</a></td>
-	    <td rowspan="2"><a href="https://attack.mitre.org/techniques/T1037/001/">Logon Script (Windows)</a></td>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Create_persistance_Logon_Script_Windows.toml">[Custom] Create persistance: Logon Script (Windows)</a></td>
-		<td>[PT] Userinitmprlogonscript_Modify</td>
-		<td></td>
-	</tr>
-	<tr>
-	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistance_Start_process_as_Logon_Script_Windows.toml">[Custom] Use persistance: Start process as Logon Script (Windows)</a></td>
-		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistance_Start_process_as_Logon_Script">Use_persistence_Start_process_as_Logon_Script</a></td>
-		<td></td>
-	</tr>
-</table>
+#### [Event Triggered Execution](https://attack.mitre.org/techniques/T1546/)
+
+| Technique   | Elastic SIEM                                                                                                                                             | Other SIEM                                                                  | Note                                               |
+|------------ |--------------------------------------------------------------------------------------------------------------------------------------------------------- |---------------------------------------------------------------------------- | -------------------------------------------------- |
+| Screensaver | [CUSTOM_Create_persistance_Modify_Screensaver.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistance_Modify_Screensaver.toml)               |[PT] Windows_Screensaver_modification, Create_persistance_Modify_Screensaver | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|             | [CUSTOM_Use_persistance_Start_process_as_Screensaver.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistance_Start_process_as_Screensaver.toml) | Use_persistance_Start_Process_as_Screensaver                                | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
+
+#### [Boot or Logon Autostart Execution](https://attack.mitre.org/techniques/T1547/)
+
+| Technique                                                                            | Elastic SIEM                                                                                                                                                                                                 | Other SIEM                                       | Note                                               |
+|------------------------------------------------------------------------------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |------------------------------------------------- | -------------------------------------------------- |
+| [Registry Run Keys / Startup Folder](https://attack.mitre.org/techniques/T1547/001/) | CUSTOM_Create_persistence_Registry_Run_Keys_based_on_command_activity.toml                                                                                                                                   |                                                  | reg add, powershell, wmi                           |
+|                                                                                      | [CUSTOM_Create_persistence_Registry_Run_Keys_based_on_registry_activity.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_Registry_Run_Keys_based_on_registry_activity.toml)               | [PT] Windows_Autorun_Modification                | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|                                                                                      | [CUSTOM_Create_persistence_Hidden_Registry_Run_Keys_based_on_registry_activity.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_Hidden_Registry_Run_Keys_based_on_registry_activity.toml) |                                                  | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|                                                                                      | [CUSTOM_Use_persistence_Start_process_as_RunOnce.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistence_Start_process_as_RunOnce.toml)                                                             | Use_persistence_Start_process_using_RunOnce      | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
+|                                                                                      | [CUSTOM_Use_persistence_Start_process_as_RunOnceEx.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistence_Start_process_as_RunOnceEx.toml)                                                         | Use_persistence_Start_process_using_RunOnceEx    | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
+|                                                                                      | [CUSTOM_Use_persistence_Start_process_from_StartupFolder.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistence_Start_process_from_StartupFolder.toml)                                             | Use_persistance_Start_process_from_StartupFolder | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
+|                                                                                      | [CUSTOM_Use_persistence_Start_process_as_Run_mechanism_based_ShellCore_engine.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistence_Start_process_as_Run_mechanism_based_ShellCore_engine.toml)   |                                                  | WinEventLog: EID 9707 Microsoft-Windows-Shell-Core |                             |
+|                                                                                      | [CUSTOM_Create_persistence_Modify_StartupFolder.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_Modify_StartupFolder.toml)                                                               | Create_persistance_Modify_StartupFolder          | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|                                                                                      | [CUSTOM_Create_persistence_Create_file_in_StartupFolder.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_Create_file_in_StartupFolder.toml)                                               |                                                  | WinEventLog: EID 4663 + SACL, Sysmon: EID 11 + XML |
+| [Shortcut Modification](https://attack.mitre.org/techniques/T1547/009/)              | [CUSTOM_Create_persistence_Shortcut_Modification.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_Shortcut_Modification.toml)                                                             | Create_persistance_Shortcut_Modification         | WinEventLog: EID 4663 + SACL for LNK files         |
+
+#### [Boot or Logon Initialization Scripts](https://attack.mitre.org/techniques/T1037/)
+
+| Technique                                                               | Elastic SIEM                                                                                                                                                               | Other SIEM                                    | Note                                               |
+|------------------------------------------------------------------------ |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |---------------------------------------------- | -------------------------------------------------- |
+|[Logon Script (Windows)](https://attack.mitre.org/techniques/T1037/001/) | [CUSTOM_Create_persistance_Logon_Script_Windows.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistance_Logon_Script_Windows.toml)                             | [PT] Userinitmprlogonscript_Modify            | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|                                                                         | [CUSTOM_Use_persistance_Start_process_as_Logon_Script_Windows.toml](./elastic-rules/windows/Persistence/CUSTOM_Use_persistance_Start_process_as_Logon_Script_Windows.toml) | Use_persistance_Start_process_as_Logon_Script | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
+
+#### [Create or Modify System Process ](https://attack.mitre.org/techniques/T1543/)
+
+| Technique                                                               | Elastic SIEM                                                                                                                                                                   | Other SIEM                   | Note                                               |
+|------------------------------------------------------------------------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |----------------------------- | -------------------------------------------------- |
+|[Windows Service](https://attack.mitre.org/techniques/T1543/003/)        | [CUSTOM_Create_persistence_DNSAdmins_based_on_registry_activity.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_DNSAdmins_based_on_registry_activity.toml) | Create_persistance_DNSAdmins | WinEventLog: EID 4657 + SACL, Sysmon: EID 13 + XML |
+|                                                                         | [CUSTOM_Create_persistence_DNSAdmins_based_on_cmd_activity.toml](./elastic-rules/windows/Persistence/CUSTOM_Create_persistence_DNSAdmins_based_on_cmd_activity.toml)           | Create_persistance_DNSAdmins | WinEventLog: EID 4688, Sysmon: EID 1 + XML         |
