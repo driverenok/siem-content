@@ -105,38 +105,40 @@ Add .detection-rules-cfg.json file to repo:
 
 Modify _post_dict_conversion() func in "detection_rules\rule.py" file (comment 925 string):
 ```
-    def _post_dict_conversion(self, obj: dict) -> dict:
-        """Transform the converted API in place before sending to Kibana."""
-		...
-        self._convert_add_related_integrations(obj)
-        #self._convert_add_required_fields(obj)
-        self._convert_add_setup(obj)
-		...
+def _post_dict_conversion(self, obj: dict) -> dict:
+    """Transform the converted API in place before sending to Kibana."""
+	...
+    self._convert_add_related_integrations(obj)
+    #self._convert_add_required_fields(obj)
+    self._convert_add_setup(obj)
+	...
 ``` 
 
 * Modify bulk_create() func in "kibana\resources.py" file to:
 ```
-    @classmethod
-    def bulk_create(cls, resources: list):
-        for r in resources:
-            assert isinstance(r, cls)
+@classmethod
+def bulk_create(cls, resources: list):
+    for r in resources:
+        assert isinstance(r, cls)
 
-        responses = Kibana.current().post(cls.BASE_URI + "/_bulk_create", data=resources)
+    responses = Kibana.current().post(cls.BASE_URI + "/_bulk_create", data=resources)
         
-        if "error" in responses[0]:
-            if responses[0]["error"]["status_code"] == 409:
-                responses = Kibana.current().put(cls.BASE_URI + "/_bulk_update", data=resources)
-        return [cls(r) for r in responses]
+    if "error" in responses[0]:
+        if responses[0]["error"]["status_code"] == 409:
+            responses = Kibana.current().put(cls.BASE_URI + "/_bulk_update", data=resources)
+    return [cls(r) for r in responses]
 ```
 This is necessary for updating existing if SIEM rule.
 
 Modify non-schema fields in file "detection_rules\etc\non-ecs-schema.json":
 ```
-		...
-		"ObjectType": "keyword",
-		"NewValue": "keyword",
-		"NewValueType": "keyword",
-		...
+{
+	...
+	"ObjectType": "keyword",
+	"NewValue": "keyword",
+	"NewValueType": "keyword",
+	...
+}
 ```
 
 ### Detection Rules Commands
