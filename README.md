@@ -9,7 +9,7 @@ SIEM Content is repo that contain detection rules for Elastic SIEM
    - [Credits tools](#credits-tools)
    - [Getting started](#getting-started)
      - [Get Sysmon Base Config](#get-sysmon-base-config)
-	 - [Get Merge-SysmonXml.ps1](#get-merge-sysmonxml.ps1)
+	 - [Get Merge-SysmonXml.ps1](#get-merge-sysmonxml.ps1-powershell-module)
 	 - [Detection Rules](#detection-rules)
 	 - [Detection Rules Commands](#detection-rules-commands)
    - [Rules](#rules)
