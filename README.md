@@ -66,7 +66,7 @@ or clone master branch and change versions in "detection_rules\etc\packages.yml"
 ```
 This is necessary for updating existing if SIEM rule.
 
-* Modify non-schema fields in file "detection_rules\etcnon-ecs-schema.json":
+* Modify non-schema fields in file "detection_rules\etc\non-ecs-schema.json":
 ```
 		...
 		"ObjectType": "keyword",
@@ -226,6 +226,6 @@ Mode                 LastWriteTime         Length Name
 	<tr>
 	    <td><a href="./elastic-rules/windows/Persistence/[Custom]_Use_persistance_Start_process_as_Logon_Script_Windows.toml">[Custom] Use persistance: Start process as Logon Script (Windows)</a></td>
 		<td><a href="./ptseim-rules/correlation-rules/windows/Persistence/Use_persistance_Start_process_as_Logon_Script">Use_persistence_Start_process_as_Logon_Script</a></td>
-		<td>Terminal Services</td>
+		<td></td>
 	</tr>
 </table>

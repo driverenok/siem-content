@@ -1,11 +1,11 @@
 [metadata]
-creation_date = "2023/03/30"
+creation_date = "2023/04/20"
 min_stack_version = "8.5.0"
 maturity = "production"
-updated_date = "2023/04/12"
+updated_date = "2023/04/20"
 
 [rule]
-name = "CUSTOM: Create persistence: Registry Run Keys (based on registry activity)"
+name = "CUSTOM: Create persistence: Hidden Registry Run Keys (based on registry activity)"
 author = ["Andrey Krasnov"]
 description = """
 This rule will generate an alert when the *//Run* key is changed (added) by Sysmon 13 or WinEvt 4657 or WinEvt 4663.
@@ -34,23 +34,17 @@ type = "eql"
 query = '''
 any where (
 	/*	Sysmon 13	*/
-	event.provider: "Microsoft-Windows-Sysmon" and event.code: "13"
-	and registry.path like~ "*\\currentversion\\*run*" and registry.value not in~ ("", "ctfmon.exe")
-	and registry.data.strings not in~ ("",  "ctfmon.exe /n")
-	)
-	or (
-	/*	WinEventLog	4663 */
-	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4663"
-	and event.action: "Registry" and winlog.event_data.ObjectType: "Key"
-	and winlog.event_data.ObjectName != "" and winlog.event_data.ObjectName: "*\\currentversion\\*run*"
-	and winlog.event_data.AccessMask: "0x2"
+	event.code: "13"
+	and registry.path like~ "*\\currentversion\\*run*" and registry.value like~ "Run*"
+	and registry.data.strings not in~ ("", "-")
 	)
 	or (
 	/*	WinEventLog	4657 + SACL for key	*/
-	event.provider: "Microsoft-Windows-Security-Auditing" and event.code: "4657"
+	event.code: "4657"
 	and winlog.event_data.ObjectName like~ "*\\currentversion\\*run*"
-	and winlog.event_data.ObjectValueName not in~ ("", "ctfmon.exe")
-	and winlog.event_data.NewValue not in~ ("",  "ctfmon.exe /n")
+	and ?winlog.event_data.ObjectValueName == null
+	and ?winlog.event_data.OldValue == null
+	and winlog.event_data.NewValue: "%%1904" 
 	)
 '''
 

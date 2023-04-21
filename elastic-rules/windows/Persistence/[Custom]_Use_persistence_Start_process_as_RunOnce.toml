@@ -2,10 +2,10 @@
 creation_date = "2023/04/03"
 min_stack_version = "8.5.0"
 maturity = "production"
-updated_date = "2023/04/03"
+updated_date = "2023/04/20"
 
 [rule]
-name = "[Custom] Use persistence: Start process as RunOnce"
+name = "CUSTOM: Use persistence: Start process as RunOnce"
 author = ["Andrey Krasnov"]
 description = """
 This rule will generate an alert when the process will starts in follow sequence: runonce.exe -> TargetProcess with WinEventLog 4688 or Sysmon 1 audit.
@@ -25,15 +25,26 @@ references = [
 	"https://github.com/ewhitehats/InvisiblePersistence"
 ]
 risk_score = 47
-rule_id = "c3ad98be-a616-4e5c-9c03-6dde3ca36265"
+rule_id = "608375e4-9612-49b9-81d5-588c4115841b"
 severity = "medium"
 tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Boot or Logon Autostart Execution", "T1547", "Registry Run Keys / Startup Folder", "T1547.001", "RunOnce", "Start Process", "runonce.exe"]
 type = "eql"
 
 query = '''
-sequence
+sequence by host.name with maxspan=30s
+	[process where process.command_line like~"runonce.exe*/Explorer"]
+	until [process where process.parent.name like~ "runonce.exe" and not process.command_line like~ "iernonce.dll*RunOnceExProcess"]
+	
+	
+(
 	[process where process.command_line like~"runonce.exe*/Explorer"]
 	[process where process.parent.name like~ "runonce.exe" and not process.command_line like~ "iernonce.dll*RunOnceExProcess"]
+	)
+	or (
+	[process where process.command_line like~"runonce.exe*/Explorer"]
+	[process where process.parent.name like~ "runonce.exe" and process.command_line like~"runonce.exe*/RunOnce6432"]
+	[process where process.parent.name like~ "runonce.exe" and not process.command_line like~ "iernonce.dll*RunOnceExProcess"]
+	)
 '''
 
 [[rule.threat]]

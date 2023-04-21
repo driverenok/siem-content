@@ -1,0 +1,57 @@
+[metadata]
+creation_date = "2023/04/19"
+min_stack_version = "8.5.0"
+maturity = "production"
+updated_date = "2023/04/19"
+
+[rule]
+name = "CUSTOM: Create persistence: DNSAdmins (based on cmd activity)"
+author = ["Andrey Krasnov"]
+description = """
+This rule will generate an alert when the cmd prompt contain dnscmd/config/serverlevelplugindll by WinEventLog 4688 or Sysmon 1.
+"""
+from = "now-5m"
+index = ["winlogbeat-*", "logs-system.*", "logs-windows.*"]
+language = "eql"
+license = ""
+note = """
+
+"""
+references = [
+	"https://attack.mitre.org/techniques/T1543/003/",
+	"https://codeby.net/threads/ot-dnsadmins-do-administratora-domennogo-kontrollera",
+	"https://medium.com/@parvezahmad90/windows-privilege-escalation-dns-admin-to-nt-authority-system-step-by-step-945fe2a094dc",
+	"https://blog.3or.de/hunting-dns-server-level-plugin-dll-injection.html",
+	"https://lolbas-project.github.io/lolbas/Binaries/Dnscmd/",
+	"https://github.com/samratashok/nishang"
+]
+risk_score = 47
+rule_id = "b313ca07-abcc-4d92-b7d4-772b4bb282fc"
+severity = "medium"
+tags = ["Windows", "Threat Detection", "Persistence", "TA0003", "Privilege Escalation", "TA0004", "Create or Modify System Process", "T1543", "Windows Service", "T1543.003", "DNSAdmins", "dnscmd"]
+type = "eql"
+
+query = '''
+process where (
+	/*	WinEventLog 4688 and Sysmon 1	*/
+	process.name: "dnscmd.exe" and process.command_line: "*dnscmd*/config*/serverlevelplugindll*"
+	)
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+[[rule.threat.technique]]
+id = "T1543"
+name = "Create or Modify System Process"
+reference = "https://attack.mitre.org/techniques/T1543/"
+
+[[rule.threat.technique.subtechnique]]
+id = "T1547.001"
+name = "Windows Service"
+reference = "https://attack.mitre.org/techniques/T1543/003/"
+
+[rule.threat.tactic]
+id = "TA0003"
+name = "Persistence"
+reference = "https://attack.mitre.org/tactics/TA0003/"

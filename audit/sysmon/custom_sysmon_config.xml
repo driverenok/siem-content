@@ -25,7 +25,7 @@
 			<TargetObject name="T1546.002,Screensaver Modification,T1112,Modify Registry" condition="contains">Control Panel\Desktop</TargetObject> <!-- Not exist in SwiftOnSecurity-->
 			<TargetObject name="T1546.012,Image File Execution Options Injection" condition="contains">CurrentVersion\Image File Execution Options\</TargetObject> <!-- Exist in SwiftOnSecurity-->
 			<TargetObject name="T1546.012,Image File Execution Options Injection" condition="contains">CurrentVersion\SilentProcessExit</TargetObject> <!-- Not exist in SwiftOnSecurity-->
-			<TargetObject name="T1543.003,Modify DNS Service,T1112,Modify RegistryT1112,Modify Registry" condition="contains">ServerLevelPluginDll</TargetObject> <!-- Not exist in SwiftOnSecurity--> <!-- DNSAdmins group privilege abuse -->
+			<TargetObject name="T1543.003,Modify DNS Service,T1112,Modify Registry,T1112,Modify Registry" condition="contains">ServerLevelPluginDll</TargetObject> <!-- Not exist in SwiftOnSecurity--> <!-- DNSAdmins group privilege abuse -->
 			</RegistryEvent>
 		</RuleGroup>
 	</EventFiltering>
